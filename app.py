@@ -13,10 +13,11 @@ from dotenv import load_dotenv
 
 # Selenium and WebDriver Manager for Edge
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 # Allow nested event loops (useful in Streamlit/Jupyter)
 nest_asyncio.apply()
@@ -71,18 +72,23 @@ def load_athlete_names():
 
 @st.cache_data(show_spinner=True)
 def get_api_details():
-    # Configure Edge options for headless mode
-    options = EdgeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
+
+    # Configure Chrome options for headless mode
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--no-sandbox')
 
     # Enable performance logging to capture network requests
-    capabilities = DesiredCapabilities.EDGE.copy()
-    capabilities['ms:loggingPrefs'] = {'performance': 'ALL'}
-    options.set_capability("ms:loggingPrefs", {'performance': 'ALL'})
+    capabilities = chrome_options.to_capabilities()
+    capabilities['goog:loggingPrefs'] = {'performance': 'ALL'}
 
-    driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
+    # Initialize Chrome WebDriver using ChromeDriverManager
+    driver = webdriver.Chrome(
+        service=ChromeService(ChromeDriverManager().install()),
+        options=chrome_options,
+        desired_capabilities=capabilities
+    )
 
     selenium_url = 'https://worldathletics.org/competition/calendar-results'
     driver.get(selenium_url)
