@@ -84,7 +84,7 @@ def get_api_details():
 
     # Initialize Chrome WebDriver using ChromeDriverManager
     driver = webdriver.Chrome(
-        service=ChromeService(ChromeDriverManager().install()),
+        service=ChromeService(ChromeDriverManager(version="120.0.6099.224").install()),
         options=chrome_options
     )
 
