@@ -79,15 +79,13 @@ def get_api_details():
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
 
-    # Enable performance logging to capture network requests
-    capabilities = chrome_options.to_capabilities()
-    capabilities['goog:loggingPrefs'] = {'performance': 'ALL'}
+    # Set performance logging via ChromeOptions capabilities
+    chrome_options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
 
     # Initialize Chrome WebDriver using ChromeDriverManager
     driver = webdriver.Chrome(
         service=ChromeService(ChromeDriverManager().install()),
-        options=chrome_options,
-        desired_capabilities=capabilities
+        options=chrome_options
     )
 
     selenium_url = 'https://worldathletics.org/competition/calendar-results'
