@@ -78,6 +78,7 @@ def get_api_details():
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
 
     # Set performance logging via ChromeOptions capabilities
     chrome_options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
